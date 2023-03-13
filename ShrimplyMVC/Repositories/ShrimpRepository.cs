@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShrimplyMVC.Data;
 using ShrimplyMVC.Models.Domain;
+using System.Runtime.CompilerServices;
 
 namespace ShrimplyMVC.Repositories
 {
@@ -12,9 +13,17 @@ namespace ShrimplyMVC.Repositories
         {
             _shrimplyDbContext = shrimplyDbContext;
         }
-        public IEnumerable<Shrimp> GetAllAsync()
+
+        public async Task Create(Shrimp shrimp)
         {
-            return _shrimplyDbContext.Shrimps.ToList();
+            await _shrimplyDbContext.Shrimps.AddAsync(shrimp);
+            await _shrimplyDbContext.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<Shrimp>> GetAllAsync()
+        {
+            return await _shrimplyDbContext.Shrimps.ToListAsync();
+        }
+
     }
 }
