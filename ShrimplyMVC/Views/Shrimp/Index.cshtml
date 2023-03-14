@@ -19,15 +19,17 @@
                 </tr>
             </thead>
             <tbody>
-                    @foreach (var shrimp in Model)
-                    {
-                        <tr>
+                @foreach (var shrimp in Model)
+                {
+                    <tr>
                         <td>@shrimp.Id</td>
                         <td>@shrimp.Name</td>
-                        <td><a class="btn btn-primary"
-                            asp-controller="Shrimp" asp-action="Edit" asp-route-id="@shrimp.Id">View</a></td>
-                        </tr>
-                    }
+                        <td>
+                            <a class="btn btn-primary"
+                           asp-controller="Shrimp" asp-action="Edit" asp-route-id="@shrimp.Id">View</a>
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>

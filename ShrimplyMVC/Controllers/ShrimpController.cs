@@ -84,5 +84,18 @@ namespace ShrimplyMVC.Controllers
 
             return View();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            await _shrimpRepository.DeleteAsync(id);
+            var notification = new Notification
+            {
+                Message = "Shrimp deleted successfully.",
+                Type = Enums.NotificationType.Success
+            };
+            TempData["Notification"] = JsonSerializer.Serialize(notification);
+            return RedirectToAction("Index");
+        }
     }
 }

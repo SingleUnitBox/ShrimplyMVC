@@ -50,5 +50,17 @@ namespace ShrimplyMVC.Repositories
             var shrimp = await _shrimplyDbContext.Shrimps.FirstOrDefaultAsync(x => x.Id == id);
             return shrimp;
         }
+
+        public async Task<bool> DeleteAsync(Guid id)
+        {
+            var shrimp = await _shrimplyDbContext.Shrimps.FindAsync(id);
+            if (shrimp != null)
+            {
+                _shrimplyDbContext.Shrimps.Remove(shrimp);
+                await _shrimplyDbContext.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
     }
 }

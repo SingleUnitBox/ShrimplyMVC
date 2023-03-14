@@ -9,5 +9,6 @@ namespace ShrimplyMVC.Repositories
         Task CreateAsync(Shrimp shrimp);
         Task<Shrimp> UpdateAsync(Shrimp shrimp);
         Task<Shrimp> GetAsync(Guid id);
+        Task<bool> DeleteAsync(Guid id);
     }
 }
