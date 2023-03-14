@@ -3,6 +3,7 @@ using ShrimplyMVC.Data;
 using ShrimplyMVC.Models;
 using ShrimplyMVC.Models.Domain;
 using ShrimplyMVC.Repositories;
+using System.Text.Json;
 
 namespace ShrimplyMVC.Controllers
 {
@@ -14,12 +15,20 @@ namespace ShrimplyMVC.Controllers
         {
             _shrimpRepository = shrimpRepository;
         }
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
+            var notificationJson = (string)TempData["Notification"];
+            if (notificationJson != null)
+            {
+                ViewData["Notification"] = JsonSerializer.Deserialize<Notification>(notificationJson);
+            }
+            
             var shrimps = await _shrimpRepository.GetAllAsync();
             return View(shrimps);
         }
 
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
@@ -40,8 +49,40 @@ namespace ShrimplyMVC.Controllers
                 Author = createShrimp.Author,
                 IsVisible = createShrimp.IsVisible,
             };
-            await _shrimpRepository.Create(shrimp);
+
+            var notification = new Notification
+            {
+                Message = "Shrimp created successfully.",
+                Type = Enums.NotificationType.Success
+            };
+            TempData["Notification"] = JsonSerializer.Serialize(notification);
+
+            await _shrimpRepository.CreateAsync(shrimp);
             return RedirectToAction("Index");
+        }
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var existingShrimp = await _shrimpRepository.GetAsync(id);
+            if (existingShrimp == null)
+            {
+                return NotFound();
+            }
+            return View(existingShrimp);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Shrimp shrimp)
+        {
+            await _shrimpRepository.UpdateAsync(shrimp);
+
+            ViewData["Notification"] = new Notification
+            {
+                Message = "Shrimp updated successfully.",
+                Type = Enums.NotificationType.Success
+            };
+
+            return View();
         }
     }
 }

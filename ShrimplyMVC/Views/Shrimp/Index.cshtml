@@ -6,6 +6,7 @@
     <h3>Shrimps</h3>
 </div>
 
+<partial name="_Notification" />
 
 <div>
     <div class="container">
@@ -23,7 +24,8 @@
                         <tr>
                         <td>@shrimp.Id</td>
                         <td>@shrimp.Name</td>
-                        <td><a href="/Admin/Shrimps/Edit/@shrimp.Id" class="btn btn-primary">View</a></td>
+                        <td><a class="btn btn-primary"
+                            asp-controller="Shrimp" asp-action="Edit" asp-route-id="@shrimp.Id">View</a></td>
                         </tr>
                     }
             </tbody>

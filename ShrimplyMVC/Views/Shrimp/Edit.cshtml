@@ -1,0 +1,76 @@
+﻿@using ShrimplyMVC.Models.Domain;
+@model Shrimp
+
+<div class="container mb-3">
+    <h3>Update Shrimp</h3>
+</div>
+
+<partial name="_Notification" />
+
+    <div>
+        <div class="container">
+            <form method="post" action="Create">
+                <div>
+                    <input asp-for="Id" hidden/>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="name">Name</label>
+                    <input type="text" class="form-control" id="name" asp-for="Name" required />
+                    <span class="text-danger" asp-validation-for="Name"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="description">Description</label>
+                    <textarea class="form-control" id="description" asp-for="Description" required></textarea>
+                    <span class="text-danger" asp-validation-for="Description"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="color">Color</label>
+                    <input type="text" class="form-control" id="color" asp-for="Color" required />
+                    <span class="text-danger" asp-validation-for="Color"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="family">Family</label>
+                    <input type="text" class="form-control" id="family" asp-for="Family" required />
+                    <span class="text-danger" asp-validation-for="Family"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="featuredImageUrl">Featured Image Url</label>
+                    <input type="text" class="form-control" id="featuredImageUrl" asp-for="FeaturedImageUrl" required />
+                    <span class="text-danger" asp-validation-for="FeaturedImageUrl"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="urlHandle">Url Handle</label>
+                    <input type="text" class="form-control" id="urlHandle" asp-for="UrlHandle" required />
+                    <span class="text-danger" asp-validation-for="UrlHandle"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="publishedDate">Published Date</label>
+                    <input type="date" class="form-control" id="publishedDate" asp-for="PublishedDate" required />
+                    <span class="text-danger" asp-validation-for="PublishedDate"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="author">Author</label>
+                    <input type="text" class="form-control" id="author" asp-for="Author" required />
+                    <span class="text-danger" asp-validation-for="Author"></span>
+                </div>
+
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-inline" id="isVisible" asp-for="IsVisible" />
+                    <label class="form-check-label" for="isVisible">Is Visible?</label>
+                </div>
+
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+
+            </form>
+        </div>
+    </div>

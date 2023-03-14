@@ -14,10 +14,30 @@ namespace ShrimplyMVC.Repositories
             _shrimplyDbContext = shrimplyDbContext;
         }
 
-        public async Task Create(Shrimp shrimp)
+        public async Task CreateAsync(Shrimp shrimp)
         {
             await _shrimplyDbContext.Shrimps.AddAsync(shrimp);
             await _shrimplyDbContext.SaveChangesAsync();
+        }
+
+        public async Task<Shrimp> UpdateAsync(Shrimp shrimp)
+        {
+            var existingShrimp = await _shrimplyDbContext.Shrimps
+                .FirstOrDefaultAsync(x => x.Id == shrimp.Id);
+            if (existingShrimp != null)
+            {
+                existingShrimp.Name = shrimp.Name;
+                existingShrimp.Description = shrimp.Description;
+                existingShrimp.Color = shrimp.Color;
+                existingShrimp.Family = shrimp.Family;
+                existingShrimp.FeaturedImageUrl = shrimp.FeaturedImageUrl;
+                existingShrimp.UrlHandle = shrimp.UrlHandle;
+                existingShrimp.PublishedDate = shrimp.PublishedDate;
+                existingShrimp.Author = shrimp.Author;
+                existingShrimp.IsVisible = shrimp.IsVisible;
+            }
+            await _shrimplyDbContext.SaveChangesAsync();
+            return existingShrimp;
         }
 
         public async Task<IEnumerable<Shrimp>> GetAllAsync()
@@ -25,5 +45,10 @@ namespace ShrimplyMVC.Repositories
             return await _shrimplyDbContext.Shrimps.ToListAsync();
         }
 
+        public async Task<Shrimp> GetAsync(Guid id)
+        {
+            var shrimp = await _shrimplyDbContext.Shrimps.FirstOrDefaultAsync(x => x.Id == id);
+            return shrimp;
+        }
     }
 }
