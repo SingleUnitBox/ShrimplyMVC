@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ShrimplyMVC.Models;
+using ShrimplyMVC.Repositories;
 using System.Diagnostics;
 
 namespace ShrimplyMVC.Controllers
@@ -7,15 +8,27 @@ namespace ShrimplyMVC.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IShrimpRepository _shrimpRepository;
+        private readonly ITagRepository _tagRepository;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger,
+            IShrimpRepository shrimpRepository,
+            ITagRepository tagRepository)
         {
             _logger = logger;
+            _shrimpRepository = shrimpRepository;
+            _tagRepository = tagRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var model = new IndexViewModel
+            {
+                Shrimps = (await _shrimpRepository.GetAllAsync()).ToList(),
+                Tags = (await _tagRepository.GetAllAsync()).ToList()
+            };
+
+            return View(model);
         }
 
         public IActionResult Privacy()

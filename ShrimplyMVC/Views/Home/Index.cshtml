@@ -1,8 +1,55 @@
-﻿@{
+﻿@model IndexViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mb-3">
+    <h3>Shrimps</h3>
 </div>
+
+<partial name="_Notification" />
+<div>
+
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-6">
+
+                <div class="mb-3">
+                    @if (Model.Tags != null & Model.Tags.Any())
+                    {
+                        @foreach (var tag in Model.Tags)
+                        {
+                            <a href="#">
+                                <span class="badge bg-dark">@tag.Name</span>
+                            </a>
+                        }
+                    }
+
+                </div>
+
+                @if (Model.Shrimps != null && Model.Shrimps.Any())
+                {
+                    @foreach (var shrimp in Model.Shrimps)
+                    {
+                        <div class="mb-5 bg-light box-shadow">
+                            <img src="@shrimp.FeaturedImageUrl" alt="@shrimp.Name" class="mb-2 d-block img-fluid" width="700" />
+                            <div class="px-4 py-4">
+                                <h2 class="mb-2">@shrimp.Name</h2>
+                                <p>
+                                    Author: @shrimp.Author
+                                    <br />
+                                    Date Published: @shrimp.PublishedDate.ToShortDateString()
+                                </p>
+                                <a href="/shrimp/@shrimp.UrlHandle" class="btn btn-dark">Read More</a>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>Shrimps not Found.</p>
+                }
+            </div>
+        </div>
+    </div>

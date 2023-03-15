@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ShrimplyMVC.Data;
+using ShrimplyMVC.Migrations;
 using ShrimplyMVC.Models;
 using ShrimplyMVC.Models.Domain;
 using ShrimplyMVC.Repositories;
@@ -11,10 +12,13 @@ namespace ShrimplyMVC.Controllers
     public class ShrimpController : Controller
     {
         private readonly IShrimpRepository _shrimpRepository;
+        private readonly ITagRepository _tagRepository;
 
-        public ShrimpController(IShrimpRepository shrimpRepository)
+        public ShrimpController(IShrimpRepository shrimpRepository,
+            ITagRepository tagRepository)
         {
             _shrimpRepository = shrimpRepository;
+            _tagRepository = tagRepository;
         }
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -24,9 +28,14 @@ namespace ShrimplyMVC.Controllers
             {
                 ViewData["Notification"] = JsonSerializer.Deserialize<Notification>(notificationJson);
             }
+
+            var model = new IndexViewModel
+            {
+                Shrimps = (await _shrimpRepository.GetAllAsync()).ToList(),
+                Tags = (await _tagRepository.GetAllAsync()).ToList()
+            };
             
-            var shrimps = await _shrimpRepository.GetAllAsync();
-           return View(shrimps);
+           return View(model);
         }
 
         [HttpGet]
