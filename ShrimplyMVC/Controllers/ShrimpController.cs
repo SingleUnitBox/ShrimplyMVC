@@ -29,13 +29,9 @@ namespace ShrimplyMVC.Controllers
                 ViewData["Notification"] = JsonSerializer.Deserialize<Notification>(notificationJson);
             }
 
-            var model = new IndexViewModel
-            {
-                Shrimps = (await _shrimpRepository.GetAllAsync()).ToList(),
-                Tags = (await _tagRepository.GetAllAsync()).ToList()
-            };
+            var shrimps = (await _shrimpRepository.GetAllAsync()).ToList();
             
-           return View(model);
+           return View(shrimps);
         }
 
         [HttpGet]

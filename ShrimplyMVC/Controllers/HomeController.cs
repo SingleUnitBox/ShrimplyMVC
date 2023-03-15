@@ -31,6 +31,15 @@ namespace ShrimplyMVC.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        [Route("tag/{tagName}")]
+        public async Task<IActionResult> Tag(string tagName)
+        {
+            var shrimps = (await _shrimpRepository.GetAllAsync(tagName)).ToList();
+            return View(shrimps);
+        }
+
+
         public IActionResult Privacy()
         {
             return View();

@@ -1,7 +1,8 @@
-﻿@model IndexViewModel
-@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@using ShrimplyMVC.Models.Domain;
+
+@model IEnumerable<Shrimp>
+
+
 
 <div class="container mb-3">
     <h3>Shrimps</h3>
@@ -13,23 +14,10 @@
     <div class="row justify-content-center">
         <div class="col-6">
 
-            <div class="mb-3">
-                @if (Model.Tags != null & Model.Tags.Any())
-                {
-                    @foreach (var tag in Model.Tags)
-                    {
-                        <a asp-controller="Home" asp-action="Tag" asp-route-tagName="@tag.Name">
-                            <span class="badge bg-dark">@tag.Name</span>
-                        </a>
 
-                    }
-                }
-
-            </div>
-
-            @if (Model.Shrimps != null && Model.Shrimps.Any())
+            @if (Model != null && Model.Any())
             {
-                @foreach (var shrimp in Model.Shrimps)
+                @foreach (var shrimp in Model)
                 {
                     <div class="mb-5 bg-light box-shadow">
                         <img src="@shrimp.FeaturedImageUrl" alt="@shrimp.Name" class="mb-2 d-block img-fluid" width="700" />
