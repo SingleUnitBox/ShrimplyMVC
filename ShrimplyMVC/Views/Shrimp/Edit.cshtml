@@ -1,5 +1,5 @@
 ﻿@using ShrimplyMVC.Models.Domain;
-@model Shrimp
+@model EditShrimpViewModel
 
 <div class="container mb-3">
     <h3>Update Shrimp</h3>
@@ -62,10 +62,17 @@
                 <span class="text-danger" asp-validation-for="Author"></span>
             </div>
 
+            <div class="mb-3">
+                <label class="form-label" for="tags">Tags (comma separated)</label>
+                <input type="text" class="form-control" id="tags" asp-for="TagsString" required />
+                <span class="text-danger" asp-validation-for="TagsString"></span>
+            </div>
+
             <div class="mb-3 form-check">
                 <input type="checkbox" class="form-check-inline" id="isVisible" asp-for="IsVisible" />
                 <label class="form-check-label" for="isVisible">Is Visible?</label>
             </div>
+
 
             <div class="mb-3">
                 <button type="submit" class="btn btn-primary">Update</button>
@@ -75,3 +82,9 @@
         </form>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        var editor = new FroalaEditor('#description');
+    </script>
+}

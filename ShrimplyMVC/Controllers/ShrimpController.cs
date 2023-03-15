@@ -3,6 +3,7 @@ using ShrimplyMVC.Data;
 using ShrimplyMVC.Models;
 using ShrimplyMVC.Models.Domain;
 using ShrimplyMVC.Repositories;
+using System.Diagnostics;
 using System.Text.Json;
 
 namespace ShrimplyMVC.Controllers
@@ -25,7 +26,7 @@ namespace ShrimplyMVC.Controllers
             }
             
             var shrimps = await _shrimpRepository.GetAllAsync();
-            return View(shrimps);
+           return View(shrimps);
         }
 
         [HttpGet]
@@ -36,6 +37,20 @@ namespace ShrimplyMVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateShrimpViewModel createShrimp)
         {
+            var tagsList = new List<Tag>();
+            if (createShrimp.TagsString != null)
+            {
+                var tags = createShrimp.TagsString.Split(',');
+                foreach (var tag in tags)
+                {
+                    var newTag = new Tag
+                    {
+                        Name = tag.Trim(),
+                    };
+                    tagsList.Add(newTag);
+                }
+            }
+
             var shrimp = new Shrimp
             {
                 Id = Guid.NewGuid(),
@@ -48,6 +63,7 @@ namespace ShrimplyMVC.Controllers
                 PublishedDate = createShrimp.PublishedDate,
                 Author = createShrimp.Author,
                 IsVisible = createShrimp.IsVisible,
+                Tags = tagsList,
             };
 
             var notification = new Notification
@@ -64,16 +80,44 @@ namespace ShrimplyMVC.Controllers
         public async Task<IActionResult> Edit(Guid id)
         {
             var existingShrimp = await _shrimpRepository.GetAsync(id);
-            if (existingShrimp == null)
+            if (existingShrimp != null)
             {
-                return NotFound();
+                var shrimp = new EditShrimpViewModel
+                {
+                    Id = existingShrimp.Id,
+                    Name = existingShrimp.Name,
+                    Description = existingShrimp.Description,
+                    Color = existingShrimp.Color,
+                    Family = existingShrimp.Family,
+                    FeaturedImageUrl = existingShrimp.FeaturedImageUrl,
+                    UrlHandle = existingShrimp.UrlHandle,
+                    PublishedDate = existingShrimp.PublishedDate,
+                    Author = existingShrimp.Author,
+                    IsVisible = existingShrimp.IsVisible,
+                    TagsString = string.Join(',', existingShrimp.Tags.Select(x => x.Name.ToLower()))
+                };
+                return View(shrimp);
             }
-            return View(existingShrimp);
+            return NotFound();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Shrimp shrimp)
+        public async Task<IActionResult> Edit(EditShrimpViewModel existingShrimp)
         {
+            var shrimp = new Shrimp
+            {
+                Id = existingShrimp.Id,
+                Name = existingShrimp.Name,
+                Description = existingShrimp.Description,
+                Color = existingShrimp.Color,
+                Family = existingShrimp.Family,
+                FeaturedImageUrl = existingShrimp.FeaturedImageUrl,
+                UrlHandle = existingShrimp.UrlHandle,
+                PublishedDate = existingShrimp.PublishedDate,
+                Author = existingShrimp.Author,
+                IsVisible = existingShrimp.IsVisible,
+                Tags = new List<Tag>(existingShrimp.TagsString.Split(',').Select(x => new Tag() { Name = x.Trim() }))
+            };
             await _shrimpRepository.UpdateAsync(shrimp);
 
             ViewData["Notification"] = new Notification

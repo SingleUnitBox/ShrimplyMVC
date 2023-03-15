@@ -10,6 +10,7 @@ builder.Services.AddDbContext<ShrimplyDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ShrimplyConnectionString")));
 
 builder.Services.AddScoped<IShrimpRepository, ShrimpRepository>();
+builder.Services.AddScoped<ITagRepository, TagRepository>();
 
 var app = builder.Build();
 
