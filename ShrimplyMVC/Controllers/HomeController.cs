@@ -36,6 +36,7 @@ namespace ShrimplyMVC.Controllers
         public async Task<IActionResult> Tag(string tagName)
         {
             var shrimps = (await _shrimpRepository.GetAllAsync(tagName)).ToList();
+            ViewData["tag"] = tagName;
             return View(shrimps);
         }
 

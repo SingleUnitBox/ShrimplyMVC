@@ -1,11 +1,13 @@
 ﻿@using ShrimplyMVC.Models.Domain;
 
 @model IEnumerable<Shrimp>
-
+@{
+    ViewData["Title"] = (string)@ViewData["tag"];
+}
 
 
 <div class="container mb-3">
-    <h3>Shrimps</h3>
+    <h3>@ViewData["tag"]</h3>
 </div>
 
 <partial name="_Notification" />
