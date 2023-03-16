@@ -32,7 +32,6 @@ namespace ShrimplyMVC.Controllers
         }
 
         [HttpGet]
-        [Route("tag/{tagName}")]
         public async Task<IActionResult> Tag(string tagName)
         {
             var shrimps = (await _shrimpRepository.GetAllAsync(tagName)).ToList();
@@ -41,7 +40,7 @@ namespace ShrimplyMVC.Controllers
         }
 
         [HttpGet]
-        [Route("shrimp/{urlHandle}")]
+        [Route("Shrimp/Details/{urlHandle}")]
         public async Task<IActionResult> Details(string urlHandle)
         {
             var shrimp = await _shrimpRepository.GetAsync(urlHandle);
