@@ -76,5 +76,12 @@ namespace ShrimplyMVC.Repositories
                 .ToListAsync();
             return shrimps;
         }
+
+        public async Task<Shrimp> GetAsync(string urlHandle)
+        {
+            var shrimp = await _shrimplyDbContext.Shrimps.Include(nameof(Shrimp.Tags))
+                .FirstOrDefaultAsync(x => x.UrlHandle == urlHandle);
+            return shrimp;
+        }
     }
 }

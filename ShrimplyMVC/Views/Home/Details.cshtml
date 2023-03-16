@@ -1,0 +1,37 @@
+﻿@using ShrimplyMVC.Models.Domain;
+@model Shrimp
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-6">
+            <h3>@Model.Name</h3>
+
+            <div class="d-flex justify-content-between">
+                <span class="text-secondary">@Model.Author</span>
+                <span class="text-secondary">@Model.PublishedDate.ToShortDateString()</span>
+            </div>
+
+            <div class="mb-3">
+                @if (Model.Tags != null && Model.Tags.Any())
+                {
+                    @foreach (var tag in Model.Tags)
+                    {
+                        <a asp-controller="Home" asp-action="Tag" asp-route-tagName="@tag.Name">
+                            <span class="badge bg-dark">@tag.Name</span>
+                        </a>
+                    }
+                }
+            </div>
+
+            <div class="mb-3">
+                @Html.Raw(Model.Description)
+            </div>
+
+        </div>
+    </div>
+</div>

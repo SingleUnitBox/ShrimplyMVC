@@ -21,7 +21,6 @@
                         <a asp-controller="Home" asp-action="Tag" asp-route-tagName="@tag.Name">
                             <span class="badge bg-dark">@tag.Name</span>
                         </a>
-
                     }
                 }
 
@@ -40,7 +39,8 @@
                                 <br />
                                 Date Published: @shrimp.PublishedDate.ToShortDateString()
                             </p>
-                            <a href="/shrimp/@shrimp.UrlHandle" class="btn btn-dark">Read More</a>
+                            <a asp-controller="Home" asp-action="Details" asp-route-urlHandle="@shrimp.UrlHandle"
+                            class="btn btn-dark">Read More</a>
                         </div>
                     </div>
                 }

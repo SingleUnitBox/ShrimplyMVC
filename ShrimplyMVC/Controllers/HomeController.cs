@@ -40,6 +40,14 @@ namespace ShrimplyMVC.Controllers
             return View(shrimps);
         }
 
+        [HttpGet]
+        [Route("shrimp/{urlHandle}")]
+        public async Task<IActionResult> Details(string urlHandle)
+        {
+            var shrimp = await _shrimpRepository.GetAsync(urlHandle);
+            return View(shrimp);
+        }
+
 
         public IActionResult Privacy()
         {
