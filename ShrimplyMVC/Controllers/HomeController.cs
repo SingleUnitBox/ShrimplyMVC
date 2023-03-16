@@ -13,16 +13,19 @@ namespace ShrimplyMVC.Controllers
         private readonly IShrimpRepository _shrimpRepository;
         private readonly ITagRepository _tagRepository;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
 
         public HomeController(ILogger<HomeController> logger,
             IShrimpRepository shrimpRepository,
             ITagRepository tagRepository,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager)
         {
             _logger = logger;
             _shrimpRepository = shrimpRepository;
             _tagRepository = tagRepository;
             _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         public async Task<IActionResult> Index()
@@ -56,6 +59,32 @@ namespace ShrimplyMVC.Controllers
         {
             var shrimp = await _shrimpRepository.GetAsync(urlHandle);
             return View(shrimp);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Login()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginUser loginUser)
+        {
+            var result = await _signInManager.PasswordSignInAsync(
+                loginUser.Username, loginUser.Password, false, false);
+            if (result.Succeeded)
+            {
+                ViewData["Notification"] = new Notification
+                {
+                    Message = "User logged in",
+                    Type = Enums.NotificationType.Success
+                };
+            }
+
+            ViewData["Notification"] = new Notification
+            {
+                Message = "Unable to login.",
+                Type = Enums.NotificationType.Error
+            };
+            return View();
         }
 
         [HttpGet]

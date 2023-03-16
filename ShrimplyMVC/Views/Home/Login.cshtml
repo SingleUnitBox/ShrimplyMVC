@@ -1,22 +1,18 @@
-﻿@model RegisterUser
+﻿@model LoginUser
 
 <div class="container mb-3">
-    <h3>Register</h3>
+    <h3>Login</h3>
 </div>
 
+<partial name="_Notification" />
 
 <div>
     <div class="container">
-        <form method="post" action="Register">
+        <form method="post" action="Login">
 
             <div class="mb-3">
                 <label class="form-label" for="username">Username</label>
-                <input class="form-control" type="text" asp-for="Username" id="username"/>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label" for="email">Email</label>
-                <input class="form-control" type="text" asp-for="Email" id="email" />
+                <input class="form-control" type="text" asp-for="Username" id="username" />
             </div>
 
             <div class="mb-3">
@@ -25,7 +21,7 @@
             </div>
 
             <div class="mb-3">
-                <button type="submit" class="btn btn-primary">Register</button>
+                <button type="submit" class="btn btn-primary">Login</button>
             </div>
 
         </form>
