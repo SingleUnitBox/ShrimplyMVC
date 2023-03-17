@@ -77,6 +77,7 @@ namespace ShrimplyMVC.Controllers
                     Message = "User logged in",
                     Type = Enums.NotificationType.Success
                 };
+                return RedirectToAction("Index");
             }
 
             ViewData["Notification"] = new Notification
@@ -123,6 +124,22 @@ namespace ShrimplyMVC.Controllers
             };
             return View();
 
+        }
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            var notification = new Notification
+            {
+                Message = "User successfully logged out.",
+                Type = Enums.NotificationType.Success
+            };
+            TempData["Notification"] = JsonSerializer.Serialize(notification);
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> AccessDenied()
+        {
+            return View();
         }
 
         public IActionResult Privacy()

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ShrimplyMVC.Data;
 using ShrimplyMVC.Migrations;
 using ShrimplyMVC.Models;
@@ -9,6 +10,7 @@ using System.Text.Json;
 
 namespace ShrimplyMVC.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ShrimpController : Controller
     {
         private readonly IShrimpRepository _shrimpRepository;

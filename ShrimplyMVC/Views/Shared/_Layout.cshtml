@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> signInManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -25,27 +28,36 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
 
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Admin
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Shrimp" asp-action="Create">Create Shrimp</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Shrimp" asp-action="Index">Shrimps</a>
-                                </li>
-                                <li><a class="dropdown-item" href="/Admin/Users/Index">Users</a></li>
-                            </ul>
-                        </li>
+                        @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Admin
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Shrimp" asp-action="Create">Create Shrimp</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Shrimp" asp-action="Index">Shrimps</a>
+                                    </li>
+                                    <li><a class="dropdown-item" href="/Admin/Users/Index">Users</a></li>
+                                </ul>
+                            </li>
+                        }
                     </ul>
-
                     <div class="d-flex align-items-center">
-                        <a class="btn btn-dark me-3" asp-controller="Home" asp-action="Register">Register</a>
-                        <a class="btn btn-dark" asp-controller="Home" asp-action="Login">Login</a>
+                        @if (signInManager.IsSignedIn(User))
+                        {
+                            <div class="me-3"> @User?.Identity?.Name </div>
+                            <a class="btn btn-dark" asp-controller="Home" asp-action="Logout">Logout</a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-dark me-3" asp-controller="Home" asp-action="Register">Register</a>
+                            <a class="btn btn-dark" asp-controller="Home" asp-action="Login">Login</a>
+                        }
                     </div>
-
                 </div>
             </div>
         </nav>
