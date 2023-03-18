@@ -12,18 +12,21 @@ namespace ShrimplyMVC.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IShrimpRepository _shrimpRepository;
         private readonly ITagRepository _tagRepository;
+        private readonly IShrimpLikeRepository _shrimpLikeRepository;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
 
         public HomeController(ILogger<HomeController> logger,
             IShrimpRepository shrimpRepository,
             ITagRepository tagRepository,
+            IShrimpLikeRepository shrimpLikeRepository,
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager)
         {
             _logger = logger;
             _shrimpRepository = shrimpRepository;
             _tagRepository = tagRepository;
+            _shrimpLikeRepository = shrimpLikeRepository;
             _userManager = userManager;
             _signInManager = signInManager;
         }
@@ -58,6 +61,10 @@ namespace ShrimplyMVC.Controllers
         public async Task<IActionResult> Details(string urlHandle)
         {
             var shrimp = await _shrimpRepository.GetAsync(urlHandle);
+            if (shrimp != null)
+            {
+                ViewData["TotalLikes"] = await _shrimpLikeRepository.GetTotalShrimpLikes(shrimp.Id);
+            }
             return View(shrimp);
         }
         [HttpGet]

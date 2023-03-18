@@ -17,7 +17,8 @@ namespace ShrimplyMVC.Controllers
         private readonly ITagRepository _tagRepository;
 
         public ShrimpController(IShrimpRepository shrimpRepository,
-            ITagRepository tagRepository)
+            ITagRepository tagRepository,
+            IShrimpLikeRepository shrimpLikeRepository)
         {
             _shrimpRepository = shrimpRepository;
             _tagRepository = tagRepository;
