@@ -1,8 +1,11 @@
-﻿namespace ShrimplyMVC.Repositories
+﻿using ShrimplyMVC.Models.Domain;
+
+namespace ShrimplyMVC.Repositories
 {
     public interface IShrimpLikeRepository
     {
         Task<int> GetTotalShrimpLikes(Guid shrimpId);
         Task AddShrimpLike(Guid shrimpId, Guid userId);
+        Task<IEnumerable<ShrimpLike>> GetAllLikes(Guid shrimpId);
     }
 }
