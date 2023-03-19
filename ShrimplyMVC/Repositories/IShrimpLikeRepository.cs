@@ -6,6 +6,6 @@ namespace ShrimplyMVC.Repositories
     {
         Task<int> GetTotalShrimpLikes(Guid shrimpId);
         Task AddShrimpLike(Guid shrimpId, Guid userId);
-        Task<IEnumerable<ShrimpLike>> GetAllLikes(Guid shrimpId);
+        Task<IEnumerable<ShrimpLike>> GetShrimpLikeUsers(Guid shrimpId);
     }
 }

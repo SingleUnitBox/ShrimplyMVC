@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using ShrimplyMVC.Models;
 using ShrimplyMVC.Repositories;
 using System.Diagnostics;
@@ -64,7 +65,18 @@ namespace ShrimplyMVC.Controllers
             if (shrimp != null)
             {
                 ViewData["TotalLikes"] = await _shrimpLikeRepository.GetTotalShrimpLikes(shrimp.Id);
+                if (_signInManager.IsSignedIn(User))
+                {
+                    var users = await _shrimpLikeRepository.GetShrimpLikeUsers(shrimp.Id);
+                    var userId = _userManager.GetUserId(User);
+                    var result = users.Any(x => x.UserId == Guid.Parse(userId));
+                    if (result)
+                    {
+                        ViewData["Liked"] = "true";
+                    }
+                }
             }
+            
             return View(shrimp);
         }
         [HttpGet]
