@@ -14,5 +14,6 @@
         public bool IsVisible { get; set; }
         public ICollection<Tag> Tags { get; set; }
         public ICollection<ShrimpLike> ShrimpLikes { get; set; }
+        public ICollection<Comment> Comments { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShrimplyMVC.Data;
 
@@ -11,9 +12,10 @@ using ShrimplyMVC.Data;
 namespace ShrimplyMVC.Migrations
 {
     [DbContext(typeof(ShrimplyDbContext))]
-    partial class ShrimplyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230319175323_Comments")]
+    partial class Comments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,9 +33,6 @@ namespace ShrimplyMVC.Migrations
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DatePublished")
-                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("ShrimpId")
                         .HasColumnType("uniqueidentifier");

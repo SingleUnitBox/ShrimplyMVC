@@ -33,6 +33,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 builder.Services.AddScoped<IShrimpRepository, ShrimpRepository>();
 builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<IShrimpLikeRepository, ShrimpLikeRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
 var app = builder.Build();
 

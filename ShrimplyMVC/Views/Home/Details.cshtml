@@ -2,17 +2,17 @@
 @using Microsoft.AspNetCore.Identity;
 @inject UserManager<IdentityUser> userManager;
 @inject SignInManager<IdentityUser> signInManager;
-@model Shrimp
+@model DetailsViewModel
 
 @{
-    ViewData["Title"] = Model.Name;
+    ViewData["Title"] = Model.Shrimp.Name;
 }
 
 
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-12 col-lg-6">
-            <h3>@Model.Name</h3>
+            <h3>@Model.Shrimp.Name</h3>
 
             <div class="mb-3">
                 <span>
@@ -25,25 +25,25 @@
                         else
                         {
                             <a id="btnLike" style="cursor: pointer"><i class="bi bi-hand-thumbs-up"></i></a>
-                        }                      
-                    }      
+                        }
+                    }
                     <span id="totalLikes">
                         @ViewData["TotalLikes"]
                     </span>
-                      likes
+                    likes
                 </span>
             </div>
 
 
             <div class="d-flex justify-content-between">
-                <span class="text-secondary">@Model.Author</span>
-                <span class="text-secondary">@Model.PublishedDate.ToShortDateString()</span>
+                <span class="text-secondary">@Model.Shrimp.Author</span>
+                <span class="text-secondary">@Model.Shrimp.PublishedDate.ToShortDateString()</span>
             </div>
 
             <div class="mb-3">
-                @if (Model.Tags != null && Model.Tags.Any())
+                @if (Model.Shrimp.Tags != null && Model.Shrimp.Tags.Any())
                 {
-                    @foreach (var tag in Model.Tags)
+                    @foreach (var tag in Model.Shrimp.Tags)
                     {
                         <a asp-controller="Home" asp-action="Tag" asp-route-tagName="@tag.Name">
                             <span class="badge bg-dark">@tag.Name</span>
@@ -53,22 +53,66 @@
             </div>
 
             <div class="mb-3">
-                @Html.Raw(Model.Description)
+                @Html.Raw(Model.Shrimp.Description)
             </div>
+            @if (signInManager.IsSignedIn(User))
+            {
+                <div class="container">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Comments</h5>
+                            <hr />
 
+
+                            <form method="post" action="Details">
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="title">Title</label>
+                                    <input class="form-control" type="text" asp-for="AddComment.Title" id="title" />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="content">Content</label>
+                                    <input class="form-control" type="text" asp-for="AddComment.Content" id="content" />
+                                </div>
+
+                                <div class="mb-3">
+                                    <button class="btn btn-secondary" type="submit">Add Comment</button>
+                                </div>
+
+                            </form>
+
+
+                            @if (Model.Shrimp.Comments != null && Model.Shrimp.Comments.Any())
+                            {
+                                @foreach (var comment in Model.Comments)
+                                {
+                                    <h6 class="card-subtitle mb-2 text-muted">@comment.Title</h6>
+                                    <p class="card-text">@comment.Content</p>
+                                    <div class="d-flex justify-content-between">
+                                        <span class="text-secondary">@comment.Username</span>
+                                        <span class="text-secondary">@comment.DatePublished.ToShortDateString()</span>
+
+                                    </div>
+                                }
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </div>
 
 @section Scripts
-{
+    {
     <script>
         const btnLikeElement = document.getElementById('btnLike');
         const totalLikesElement = document.getElementById('totalLikes');
 
-        async function totalLikes()
-        {
-            fetch('/api/ShrimpLike/@Model.Id/TotalLikes', {
+        async function totalLikes() {
+            fetch('/api/ShrimpLike/@Model.Shrimp.Id/TotalLikes', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -79,21 +123,20 @@
                 .then(result => totalLikesElement.innerHTML = result);
         }
 
-        async function addShrimpLike()
-        {
+        async function addShrimpLike() {
             fetch('/api/ShrimpLike/Add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': '*/*'
                 },
-                body: JSON.stringify({ shrimpId : '@Model.Id', userId : '@userManager.GetUserId(User)' })
+                body: JSON.stringify({ shrimpId: '@Model.Shrimp.Id', userId: '@userManager.GetUserId(User)' })
             })
-            .then(() => {
-                btnLike.innerHTML = '<i class="bi bi-hand-thumbs-up-fill"></i>';
-                btnLike.removeEventListener('click', addShrimpLike);
-                totalLikes();
-            });
+                .then(() => {
+                    btnLike.innerHTML = '<i class="bi bi-hand-thumbs-up-fill"></i>';
+                    btnLike.removeEventListener('click', addShrimpLike);
+                    totalLikes();
+                });
         }
 
         btnLikeElement.addEventListener('click', addShrimpLike);

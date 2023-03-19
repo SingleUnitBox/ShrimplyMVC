@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using ShrimplyMVC.Migrations;
 using ShrimplyMVC.Models;
+using ShrimplyMVC.Models.Domain;
 using ShrimplyMVC.Repositories;
 using System.Diagnostics;
 using System.Text.Json;
@@ -14,6 +16,7 @@ namespace ShrimplyMVC.Controllers
         private readonly IShrimpRepository _shrimpRepository;
         private readonly ITagRepository _tagRepository;
         private readonly IShrimpLikeRepository _shrimpLikeRepository;
+        private readonly ICommentRepository _commentRepository;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
 
@@ -21,6 +24,7 @@ namespace ShrimplyMVC.Controllers
             IShrimpRepository shrimpRepository,
             ITagRepository tagRepository,
             IShrimpLikeRepository shrimpLikeRepository,
+            ICommentRepository commentRepository,
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager)
         {
@@ -28,10 +32,10 @@ namespace ShrimplyMVC.Controllers
             _shrimpRepository = shrimpRepository;
             _tagRepository = tagRepository;
             _shrimpLikeRepository = shrimpLikeRepository;
+            _commentRepository = commentRepository;
             _userManager = userManager;
             _signInManager = signInManager;
         }
-
         public async Task<IActionResult> Index()
         {
             var notificationJson = (string)TempData["Notification"];
@@ -61,9 +65,11 @@ namespace ShrimplyMVC.Controllers
         [Route("Shrimp/Details/{urlHandle}")]
         public async Task<IActionResult> Details(string urlHandle)
         {
+            var model = new DetailsViewModel();
             var shrimp = await _shrimpRepository.GetAsync(urlHandle);
             if (shrimp != null)
             {
+                model.Shrimp = shrimp;
                 ViewData["TotalLikes"] = await _shrimpLikeRepository.GetTotalShrimpLikes(shrimp.Id);
                 if (_signInManager.IsSignedIn(User))
                 {
@@ -74,10 +80,32 @@ namespace ShrimplyMVC.Controllers
                     {
                         ViewData["Liked"] = "true";
                     }
+
+                    var shrimpComments = (await _commentRepository.GetAllComments(shrimp.Id)).ToList();
+                    var comments = new List<CommentViewModel>();
+
+                    foreach (var comment in shrimpComments)
+                    {
+                        comments.Add(new CommentViewModel
+                        {
+                            Title = comment.Title,
+                            Content = comment.Content,
+                            DatePublished = comment.DatePublished,
+                            Username = (await _userManager.FindByIdAsync(comment.UserId.ToString())).UserName
+                        });
+                    }
+                    model.Comments = comments;
+                    return View(model);
                 }
+                return View(model);
             }
-            
-            return View(shrimp);
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Details()
+        {
+            return View();
         }
         [HttpGet]
         public async Task<IActionResult> Login()
@@ -171,5 +199,6 @@ namespace ShrimplyMVC.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
     }
 }
