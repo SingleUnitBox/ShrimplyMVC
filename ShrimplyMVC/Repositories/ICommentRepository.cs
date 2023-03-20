@@ -6,5 +6,6 @@ namespace ShrimplyMVC.Repositories
     {
         Task<Comment> AddAsync(Comment comment);
         Task<IEnumerable<Comment>> GetAllComments(Guid shrimpId);
+        Task<bool> DeleteAsync(Guid id);
     }
 }

@@ -63,8 +63,7 @@
                             <h5 class="card-title">Comments</h5>
                             <hr />
 
-
-                            <form method="post" action="Details">
+                            <form method="post">
 
                                 <div class="mb-3">
                                     <label class="form-label" for="title">Title</label>
@@ -76,8 +75,12 @@
                                     <input class="form-control" type="text" asp-for="AddComment.Content" id="content" />
                                 </div>
 
+                                <input type="hidden" class="form-control" asp-for="AddComment.ShrimpId" value="@Model.Shrimp.Id">
+
                                 <div class="mb-3">
-                                    <button class="btn btn-secondary" type="submit">Add Comment</button>
+                                    <button class="btn btn-secondary" type="submit">
+                                        Add Comment
+                                    </button>
                                 </div>
 
                             </form>
@@ -92,6 +95,18 @@
                                     <div class="d-flex justify-content-between">
                                         <span class="text-secondary">@comment.Username</span>
                                         <span class="text-secondary">@comment.DatePublished.ToShortDateString()</span>
+                                        <br>
+                                        @if (comment.Username == userManager.GetUserName(User))
+                                        {
+                                            <form method="post" action="DeleteComment">
+                                                <span>
+                                                    <button type="submit" asp-controller="Home" asp-action="DeleteComment" asp-route-id="@comment.Id">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </span>
+                                            </form>
+
+                                        }
 
                                     </div>
                                 }

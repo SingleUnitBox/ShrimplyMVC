@@ -65,6 +65,7 @@ namespace ShrimplyMVC.Controllers
         [Route("Shrimp/Details/{urlHandle}")]
         public async Task<IActionResult> Details(string urlHandle)
         {
+            TempData["urlHandle"] = urlHandle;
             var model = new DetailsViewModel();
             var shrimp = await _shrimpRepository.GetAsync(urlHandle);
             if (shrimp != null)
@@ -88,6 +89,7 @@ namespace ShrimplyMVC.Controllers
                     {
                         comments.Add(new CommentViewModel
                         {
+                            Id = comment.Id,
                             Title = comment.Title,
                             Content = comment.Content,
                             DatePublished = comment.DatePublished,
@@ -103,9 +105,28 @@ namespace ShrimplyMVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Details()
+        [Route("Shrimp/Details/{urlHandle}")]
+        public async Task<IActionResult> Details(DetailsViewModel model)
         {
-            return View();
+            var userId = _userManager.GetUserId(User);
+            var comment = new Comment
+            {
+                Id = Guid.NewGuid(),
+                Title = model.AddComment.Title,
+                Content = model.AddComment.Content,
+                DatePublished = DateTime.UtcNow,
+                ShrimpId = model.AddComment.ShrimpId,
+                UserId = Guid.Parse(userId)
+            };
+            await _commentRepository.AddAsync(comment);
+
+            return RedirectToAction("Details");
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteComment(Guid id)
+        {
+            await _commentRepository.DeleteAsync(id);
+            return RedirectToAction("Details", new { urlHandle = TempData["urlHandle"] });
         }
         [HttpGet]
         public async Task<IActionResult> Login()
