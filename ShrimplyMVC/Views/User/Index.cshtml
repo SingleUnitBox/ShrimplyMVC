@@ -1,0 +1,91 @@
+﻿@using Microsoft.AspNetCore.Identity;
+
+@model UserIndexViewModel
+
+<div class="container mb-3">
+    <h3>Users</h3>
+</div>
+
+<partial name="_Notification" />
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUser">
+    Add User
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="addUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="Register">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label" for="username">Username</label>
+                        <input class="form-control" type="text" id="username" asp-for="@Model.AddUser.Username" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="email">Email</label>
+                        <input class="form-control" type="text" id="email" asp-for="@Model.AddUser.Email" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="password">Password</label>
+                        <input class="form-control" type="password" id="password" asp-for="@Model.AddUser.Password" />
+                    </div>
+
+                    <div class="mb-3">
+                        <input class="form-check-inline" type="checkbox" asp-for="@Model.AddUser.AdminCheckbox" />
+                        <label class="form-check-label">Admin</label>
+                    </div>
+
+                    <div class="mb-3">
+                        <input type="checkbox" disabled checked />
+                        <label>User</label>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" asp-controller="User" asp-action="Register">
+
+                        Add User
+
+
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div class="container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Username</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.Users)
+                {
+                    <tr>
+                        <td>@user.Id</td>
+                        <td>@user.UserName</td>
+                        <td>
+                            <a class="btn btn-primary"
+                           asp-controller="Shrimp" asp-action="Edit" asp-route-id="">View</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
