@@ -31,6 +31,15 @@ namespace ShrimplyMVC.Repositories
             return false;
         }
 
+        public async Task DeleteAsync(Guid id)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user != null) 
+            {
+                await _userManager.DeleteAsync(user);
+            }
+        }
+
         public async Task<IEnumerable<IdentityUser>> GetAllAsync()
         {
             var users = await _authDbContext.Users.ToListAsync();
