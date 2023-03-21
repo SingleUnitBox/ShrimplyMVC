@@ -80,8 +80,11 @@
                         <td>@user.Id</td>
                         <td>@user.UserName</td>
                         <td>
-                            <a class="btn btn-primary"
-                           asp-controller="Shrimp" asp-action="Edit" asp-route-id="">View</a>
+                            <form method="post" action="Delete">
+                                <button class="btn btn-danger"
+                               asp-controller="User" asp-action="Delete" asp-route-id="@user.Id">Delete</button>
+                            </form>
+                            
                         </td>
                     </tr>
                 }
